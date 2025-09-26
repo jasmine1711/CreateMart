@@ -2,7 +2,7 @@
 
 ![Demo App](/frontend/public/home.png)
 
-About This Course:
+About The Project:
 
 -   ⚛️ Tech Stack: React.js, Node.js, Express.js, MongoDB, Chakra UI
 -   🔥 Build an API
