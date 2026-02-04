@@ -37,16 +37,6 @@ app.options("*", cors());
 // 5️⃣ Routes
 app.use("/api/products", productRoutes);
 
-// 6️⃣ Serve frontend in production
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/frontend/dist")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(
-      path.join(__dirname, "frontend", "dist", "index.html")
-    );
-  });
-}
 
 // 7️⃣ Connect DB then start server
 connectDB()
