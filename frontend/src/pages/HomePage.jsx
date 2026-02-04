@@ -30,8 +30,9 @@ Current Products 🌐
  spacing={10}
  w={"full"}
 >
-  {products.map((product) => (
-    <ProductCard key = {product._id} product={product} />
+ {Array.isArray(products) &&
+  products.map((product) => (
+    <ProductCard key={product._id} product={product} />
   ))}
 </SimpleGrid>
 
