@@ -20,15 +20,19 @@ const __dirname = path.resolve();
 app.use(express.json());
 
 app.use(cors({
-  origin: [
-    "https://create-mart-7r1l-git-main-jasmine1711s-projects.vercel.app"
-  ],
+  origin: (origin, callback) => {
+    if (
+      !origin ||
+      origin.endsWith(".vercel.app")
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
 }));
-
-app.options("*", cors()); // preflight support
 
 // 5️⃣ Routes
 app.use("/api/products", productRoutes);
