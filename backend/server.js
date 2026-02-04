@@ -21,18 +21,18 @@ app.use(express.json());
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (
-      !origin ||
-      origin.endsWith(".vercel.app")
-    ) {
+    if (!origin || origin.endsWith(".vercel.app")) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
   },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+app.options("*", cors());
+
 
 // 5️⃣ Routes
 app.use("/api/products", productRoutes);
