@@ -1,6 +1,5 @@
 import { create } from "zustand";
 
-// ✅ ADDED: API base URL from Vercel env (Render backend)
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const useProductStore = create((set) => ({
@@ -14,43 +13,43 @@ export const useProductStore = create((set) => ({
       return;
     }
 
-    // ✅ UPDATED: use Render backend URL instead of /api/products
     const res = await fetch(`${API_URL}/api/products`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newProduct),
     });
 
-    const data = await res.json();
+    const result = await res.json();
 
-    // ✅ UPDATED: backend returns product object directly (not data.data)
-    set((state) => ({ products: [...state.products, data] }));
+    // ✅ push ONLY the product object
+    set((state) => ({
+      products: [...state.products, result.data],
+    }));
 
     return { success: true, message: "Product created successfully" };
   },
 
   // Fetch all products
   fetchProducts: async () => {
-    // ✅ UPDATED: use Render backend URL
     const res = await fetch(`${API_URL}/api/products`);
-    const data = await res.json();
+    const result = await res.json();
 
-    // ✅ UPDATED: backend returns ARRAY, so set directly
-    set({ products: data });
+    // ✅ store ONLY the array
+    set({ products: result.data });
   },
 
   // Delete product
   deleteProduct: async (pid) => {
-    // ✅ UPDATED: use Render backend URL
     const res = await fetch(`${API_URL}/api/products/${pid}`, {
       method: "DELETE",
     });
 
-    const data = await res.json();
-    if (!data.success) return { success: false, message: data.message };
+    const result = await res.json();
+    if (!result.success)
+      return { success: false, message: result.message };
 
     set((state) => ({
-      products: state.products.filter((product) => product._id !== pid),
+      products: state.products.filter((p) => p._id !== pid),
     }));
 
     return { success: true, message: "Product deleted successfully" };
@@ -58,19 +57,19 @@ export const useProductStore = create((set) => ({
 
   // Update product
   updateProduct: async (pid, updatedData) => {
-    // ✅ UPDATED: use Render backend URL
     const res = await fetch(`${API_URL}/api/products/${pid}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedData),
     });
 
-    const data = await res.json();
-    if (!data.success) return { success: false, message: data.message };
+    const result = await res.json();
+    if (!result.success)
+      return { success: false, message: result.message };
 
     set((state) => ({
       products: state.products.map((product) =>
-        product._id === pid ? data.data : product
+        product._id === pid ? result.data : product
       ),
     }));
 
